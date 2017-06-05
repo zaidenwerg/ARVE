@@ -29,9 +29,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       #$ssh_pub_key = File.readlines("#{Dir.home}/.ssh/id_rsa.pub").first.strip
       ssh.inline = <<-SHELL
        sudo ssh-keygen -t rsa -f /root/.ssh/id_rsa -q -P ""
-       $ssh_pub_key = sudo cat /root/.ssh/id_rsa.pub
+      # sudo cat /root/.ssh/id_rsa.pub
       SHELL
       end
+
+    $ssh_pub_key_sanjer = sanjer.vm.provision "shell", inline: "sudo cat /root/.ssh/id_rsa.pub"
 
   end
 
@@ -49,10 +51,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
 
       srv.vm.provision "shell" do |ssh|
+        ssh_pub_key = $ssh_pub_key_sanjer
         ssh.inline = <<-SHELL
           mkdir -p /root/.ssh
-          echo #{$ssh_pub_key} >> /home/vagrant/.ssh/authorized_keys
-	  echo #{$ssh_pub_key} >> /root/.ssh/authorized_keys
+          echo #{ssh_pub_key} >> /home/vagrant/.ssh/authorized_keys
+	  echo #{ssh_pub_key} >> /root/.ssh/authorized_keys
 	SHELL
       end
 
