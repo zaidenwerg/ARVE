@@ -1,0 +1,40 @@
+---
+ceph-clients:
+  hosts:
+    ceph-client:
+      box: ubuntu/trusty64
+      ram: 512
+      cpu: 1
+      ip: 172.24.5.100
+  vars:
+    testing: value
+
+ceph-nodes:
+  hosts:
+    ceph-node1:
+      box: ubuntu/trusty64
+      ram: 512
+      cpu: 1
+      ip: 172.24.5.101
+    ceph-node2:
+      box: ubuntu/trusty64
+      ram: 512
+      cpu: 1
+      ip: 172.24.5.102
+    ceph-node3:
+      box: ubuntu/trusty64
+      ram: 512
+      cpu: 1
+      ip: 172.24.5.103
+
+all:
+  children:
+    ceph-nodes:
+    ceph-clients:
+  hosts:
+    ceph-node1:
+      box: ubuntu/trusty64
+      ram: 512
+      cpu: 1
+      ip: 172.24.5.101
+

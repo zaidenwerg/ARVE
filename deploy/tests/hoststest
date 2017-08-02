@@ -1,0 +1,5 @@
+127.0.0.1	localhost
+172.24.5.100	ceph-client
+172.24.5.101	ceph-node1
+172.24.5.102	ceph-node2
+172.24.5.103	ceph-node3
