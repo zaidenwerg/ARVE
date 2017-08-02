@@ -6,57 +6,40 @@
 Vagrant.require_version ">= 1.6.0"
 VAGRANTFILE_API_VERSION = "2"
 
-# Require YAML module
+# Require modules
 require 'yaml'
+require 'set'
 
 # Read YAML file with box details
-servers = YAML.load_file('vagrant-hosts.yml')
+hostfile = YAML.load_file('vagrant-hosts.yml')
+nodeset = Set.new []
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  hostfile.each do |group,objects| #T1:
+    objects.each do |object,nodes| #T2:
+      if object == 'hosts' #T3:
+        nodes.each do |node,vars| #T4:
+          unless nodeset.include?(node) #T5:
+            nodeset.add(node)
+            config.vm.define node do |nodeconf| #T6:
+              nodeconf.vm.box = vars["box"]
+              nodeconf.vm.network "private_network", ip: vars["ip"]
+              nodeconf.vm.hostname = node
+              nodeconf.vm.provider :virtualbox do |vb| #T7:
+                vb.name = node
+                vb.memory = vars["ram"]
+                vb.cpus = vars["cpu"]
+              end #End of T7
+            end #End of T6
+          end #End of T5
+        end #End of T4
+      elsif object == "vars"
+        # This part should handle group vars
+      end #End of T3
+    end #End of T2
+  end #End of T1
 
-
-  #A1: Iterate through entries in YAML file
-  servers.each do |server|
-    #A2: Configure each server
-    config.vm.define server["name"] do |srv|
-      srv.vm.box = server["box"]
-      srv.vm.network "private_network", ip: server["ip"]
-      srv.vm.hostname = server["name"]
-      #A3: Provider specific configuration (VirtualBox)
-      srv.vm.provider :virtualbox do |vb|
-        vb.name = server["name"]
-        vb.memory = server["ram"]
-        vb.cpus = server["cpu"]
-        ##########################
-        #A4: Only for ceph project
-        if server["sdb"] == true
-          diskb = './tmp/' + server["name"] + '_vdb.vdi'
-          unless File.exist?(diskb)
-            vb.customize ['createhd', '--filename', diskb, '--variant', 'Fixed', '--size', 10 * 1024]
-          end
-          vb.customize ['storageattach', :id,  '--storagectl', 'SATAController', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', diskb]       
-          if server["sdc"] == true
-            diskc = './tmp/' + server["name"] + '_vdc.vdi' 
-            unless File.exist?(diskc)
-              vb.customize ['createhd', '--filename', diskc, '--variant', 'Fixed', '--size', 10 * 1024]
-            end
-          vb.customize ['storageattach', :id,  '--storagectl', 'SATAController', '--port', 2, '--device', 0, '--type', 'hdd', '--medium', diskc]
-          end
-        end
-        #End A4
-        ##########################
-      end
-      #End A3
-    end
-    #End A2
-  end
-  #End A1
-
-  #B1: Provision with ansible
-  config.vm.provision "ansible" do |ansible|
+  config.vm.provision "ansible" do |ansible| #B1: Provision with ansible
     ansible.playbook = "./provisioning/arve.provision.yml"
-  end 
-  #End B1
-
-end
-#The End
+  end #End B1
+end #The End

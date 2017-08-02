@@ -1,34 +1,30 @@
 ---
+appservers:
+  hosts:
+    app01:
+      box: centos/7
+      ram: 256
+      cpu: 1
+      ip: 172.24.5.101
+  vars:
+    testing: value
 
-- name: ceph-client
-  box: ubuntu/trusty64
-  ram: 512
-  cpu: 1
-  ip: 172.24.5.100
-  sdb: false
-  sdc: false
+webservers:
+  hosts:
+    web01:
+      box: centos/7
+      ram: 256
+      cpu: 1
+      ip: 172.24.5.111
+    web02:
+      box: centos/7
+      ram: 256
+      cpu: 1
+      ip: 172.24.5.112
 
-- name: ceph-node1
-  box: ubuntu/trusty64
-  ram: 512
-  cpu: 1
-  ip: 172.24.5.101
-  sdb: true
-  sdc: true
-
-- name: ceph-node2
-  box: ubuntu/trusty64
-  ram: 512
-  cpu: 1
-  ip: 172.24.5.102
-  sdb: true
-  sdc: true
-
-- name: ceph-node3
-  box: ubuntu/trusty64
-  ram: 512
-  cpu: 1
-  ip: 172.24.5.103
-  sdb: true
-  sdc: true
-
+all:
+  children:
+    webservers:
+    appservers:
+  hosts:
+    app01:

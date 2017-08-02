@@ -33,8 +33,3 @@ all:
     ceph-clients:
   hosts:
     ceph-node1:
-      box: ubuntu/trusty64
-      ram: 512
-      cpu: 1
-      ip: 172.24.5.101
-
