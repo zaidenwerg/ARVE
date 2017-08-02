@@ -1,4 +1,50 @@
 ---
+
+#   - Comments begin with the '#' character
+#   - Blank lines are ignored
+#   - Top level entries are assumed to be groups, start with 'all' to have a full hierchy
+#   - Hosts must be specified in a group's hosts:
+#     and they must be a key (: terminated)
+#   - groups can have children, hosts and vars keys
+#   - Each hostname defined will configure a VM
+#   - Anything defined under a hostname is assumed to be a var
+#   - A hostname can be a member of multiple groups
+#   - A hostname(VM) must be given it's properties in the first time it is mentioned in this file /
+#     (Properties that are deffined later will be ignored and are unnecessary)
+#   - Every group/hosts entriy must have an object deffined uder it
+
+# Example file - (uncomment it and you are ready to go)
+
+# appservers:
+#   hosts:
+#     app01:
+#       box: centos/7
+#       ram: 256
+#       cpu: 1
+#       ip: 172.24.5.101
+#   vars:
+#     agroupvar: avalue
+#
+# webservers:
+#   hosts:
+#     web01:
+#       box: centos/7
+#       ram: 256
+#       cpu: 1
+#       ip: 172.24.5.111
+#     web02:
+#       box: centos/7
+#       ram: 256
+#       cpu: 1
+#       ip: 172.24.5.112
+#
+# all:
+#   children:
+#     webservers:
+#     appservers:
+#   hosts:
+#     app01:
+
 appservers:
   hosts:
     app01:

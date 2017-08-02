@@ -16,17 +16,17 @@ nodeset = Set.new []
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   hostfile.each do |group,objects| #T1:
-    objects.each do |object,nodes| #T2:
+    objects.each do |object,subobjects| #T2:
       if object == 'hosts' #T3:
-        nodes.each do |node,vars| #T4:
-          unless nodeset.include?(node) #T5:
-            nodeset.add(node)
-            config.vm.define node do |nodeconf| #T6:
+        subobjects.each do |subobject,vars| #T4:
+          unless nodeset.include?(subobject) #T5:
+            nodeset.add(subobject)
+            config.vm.define subobject do |nodeconf| #T6:
               nodeconf.vm.box = vars["box"]
               nodeconf.vm.network "private_network", ip: vars["ip"]
-              nodeconf.vm.hostname = node
+              nodeconf.vm.hostname = subobject
               nodeconf.vm.provider :virtualbox do |vb| #T7:
-                vb.name = node
+                vb.name = subobject
                 vb.memory = vars["ram"]
                 vb.cpus = vars["cpu"]
               end #End of T7
