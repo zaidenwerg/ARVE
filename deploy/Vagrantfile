@@ -11,7 +11,7 @@ require 'yaml'
 require 'set'
 
 # Read YAML file with box details
-hostfile = YAML.load_file('vagrant-hosts.yml')
+hostfile = YAML.load_file('wishlist.yml')
 nodeset = Set.new []
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -23,7 +23,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             nodeset.add(subobject)
             config.vm.define subobject do |nodeconf| #T6:
               nodeconf.vm.box = vars["box"]
-              nodeconf.vm.network "private_network", ip: vars["ansible_host"], auto_config: false
+              nodeconf.vm.network "private_network", ip: vars["ansible_host"].to_s
               nodeconf.vm.hostname = subobject
               nodeconf.vm.provider :virtualbox do |vb| #T7:
                 vb.name = subobject
