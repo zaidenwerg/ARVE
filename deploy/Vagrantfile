@@ -23,7 +23,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             nodeset.add(subobject)
             config.vm.define subobject do |nodeconf| #T6:
               nodeconf.vm.box = vars["box"]
-              nodeconf.vm.network "private_network", ip: vars["ip"]
+              nodeconf.vm.network "private_network", ip: vars["ansible_host"], auto_config: false
               nodeconf.vm.hostname = subobject
               nodeconf.vm.provider :virtualbox do |vb| #T7:
                 vb.name = subobject

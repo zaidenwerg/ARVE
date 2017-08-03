@@ -14,14 +14,13 @@
 #   - Every group/hosts entriy must have an object deffined uder it
 
 # Example file - (uncomment it and you are ready to go)
-
 # appservers:
 #   hosts:
 #     app01:
 #       box: centos/7
 #       ram: 256
 #       cpu: 1
-#       ip: 172.24.5.101
+#       ansible_host: 172.24.5.101
 #   vars:
 #     agroupvar: avalue
 #
@@ -31,12 +30,12 @@
 #       box: centos/7
 #       ram: 256
 #       cpu: 1
-#       ip: 172.24.5.111
+#       ansible_host: 172.24.5.111
 #     web02:
 #       box: centos/7
 #       ram: 256
 #       cpu: 1
-#       ip: 172.24.5.112
+#       ansible_host: 172.24.5.112
 #
 # all:
 #   children:
@@ -51,7 +50,7 @@ appservers:
       box: centos/7
       ram: 256
       cpu: 1
-      ip: 172.24.5.101
+      ansible_host: 172.24.5.101
   vars:
     testing: value
 
@@ -61,12 +60,12 @@ webservers:
       box: centos/7
       ram: 256
       cpu: 1
-      ip: 172.24.5.111
+      ansible_host: 172.24.5.111
     web02:
       box: centos/7
       ram: 256
       cpu: 1
-      ip: 172.24.5.112
+      ansible_host: 172.24.5.112
 
 all:
   children:
