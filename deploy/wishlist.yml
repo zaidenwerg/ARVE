@@ -47,7 +47,7 @@
 appservers:
   hosts:
     app01:
-      box: centos/7
+      box: ubuntu/trusty64
       ram: 256
       cpu: 1
       ansible_host: 172.24.5.101
